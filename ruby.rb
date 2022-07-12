@@ -19,13 +19,9 @@ class Start
         @word = line if idx == @randnum
       end
     end
-    puts @word
+    # puts @word
     @word
   end
-
-  # def check_word_length
-  #   random_word until @word.length >= 5 && @word.length <= 12
-  # end
 
   def make_hint
     if @word.length > 3
@@ -50,7 +46,7 @@ class Player
 
   def player_guess
     puts 'Guess a letter'
-    @p_guess = gets.chomp
+    @p_guess = gets.chomp.downcase
     if @p_guess.length > 1 || @p_guess.empty?
       puts 'INVALID'
       @p_guess = gets.chomp
@@ -76,21 +72,22 @@ class Game
   def add_to_hint
     if @word.include?(@p_guess)
       @index = (0...@word.length).find_all { |i| @word[i] == @p_guess.to_s }
-      p @index
+      # p @index
       @index.each do |index|
         @hint[index] = @word[index]
       end
-      p @hint
     end
+    p @hint
+
   end
 
   def check_win
     joined_hint = @hint.join('')
-    p @hint
-    p joined_hint
+    # p @hint
+    # p joined_hint
     joined_hint = joined_hint.to_s
-    p joined_hint
-    p word = @word.strip
+    # p joined_hint
+    word = @word.strip
     word = word.to_s
     if joined_hint == word
       puts 'YOU WIN!'
@@ -103,7 +100,6 @@ player = Player.new
 start = Start.new
 until start.word.length >= 5 && start.word.length <= 12
   start.random_word
-  # start.check_word_length # not working
   start.make_hint
 end 
 
@@ -113,5 +109,10 @@ until player.p_guess == start.word || player.guess.zero?
   game.add_to_hint
   game.check_win
 
+
   player.guess = 0 if game.game_running == false
 end
+
+puts start.word
+
+# stop same letter being entered 
