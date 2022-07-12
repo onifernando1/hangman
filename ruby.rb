@@ -5,18 +5,25 @@ class Game
 
   def initialize
     @word = ''
+    @hint = []
 
   end
 
   def random_word
     @fname = 'google-10000-english-no-swears.txt'
-    @randnum = rand(1..9893)
+    
+    until @word.length >= 5 && @word.length <= 12
+    
+        @randnum = rand(1..9893)
 
-    File.open(@fname, 'r') do |file|
-      file.readlines.each_with_index do |line, idx|
-        @word = line if idx == @randnum
-      end
-    end
+        File.open(@fname, 'r') do |file|
+        file.readlines.each_with_index do |line, idx|
+            if idx == @randnum
+                @word = line 
+            end 
+        end
+        end
+    end 
 
     puts @word
     @word
