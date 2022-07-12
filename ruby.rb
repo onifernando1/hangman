@@ -24,7 +24,7 @@ class Player < Game
 
   def initialize
     @guess = 12
-    @player_guess = 'AB'
+    @p_guess = 'AB'
   end
 
   def guesses
@@ -33,16 +33,16 @@ class Player < Game
 
   def player_guess
     puts 'Guess a letter'
-    @player_guess = gets.chomp
-    if @player_guess.length > 1 || @player_guess.empty?
+    @p_guess = gets.chomp
+    if @p_guess.length > 1 || @p_guess.empty?
       puts 'INVALID'
-      @player_guess = gets.chomp
+      @p_guess = gets.chomp
       guesses()
-    elsif @player_guess.length == 1
+    elsif @p_guess.length == 1
       @guess -= 1
       guesses()
     end
-    @player_guess
+    @p_guess
   end
 end
 
