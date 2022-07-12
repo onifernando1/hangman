@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 class Game
   def random_word
     fname = 'google-10000-english-no-swears.txt'
@@ -14,11 +13,20 @@ class Game
     end
 
     puts word
+    word
   end
 end
 
 class Player < Game
+
+    def initialize
+        @guesses = 0
+    end 
+
+    def guesses
+        puts "Guesses remaining: #{@guesses}"
+    end 
 end
 
-game = Game.new()
+game = Game.new
 game.random_word
