@@ -30,6 +30,13 @@ class Start
     end 
   end 
 
+  def make_hint
+    if @word.length > 3 
+      @length = @word.length - 1 
+      @hint = Array.new(@length, "_")
+    end 
+  end 
+
   
 end
 
@@ -67,19 +74,15 @@ class Game
     @word = word
   end
 
-  def show_hint
-    if @word.length > 3 
-      @length = @word.length - 1 
-      @hint = Array.new(@length, "_")
-      p @hint
-    end 
-  end 
+
 
   def add_to_hint
-    puts "add #{@word}"
-    puts "add  #{@p_guess}"
+
     if @word.include?(@p_guess)
-        puts " add #{@word.index(@p_guess)}"
+        @index = @word.index(@p_guess)
+        @hint[@index] = @word[@index]
+        p @hint
+        @hint
     end 
   end 
 
@@ -89,6 +92,7 @@ player = Player.new
 start = Start.new
 start.random_word()
 start.check_word_length() #not working 
+start.make_hint()
 
 until player.p_guess == start.word || player.guess == 0 
   player.player_guess()
