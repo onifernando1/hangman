@@ -3,24 +3,28 @@
 class Game
   attr_reader :word
 
-  def random_word
-    fname = 'google-10000-english-no-swears.txt'
-    randnum = rand(1..9893)
-    word = ''
+  def initialize
+    @word = ''
 
-    File.open(fname, 'r') do |file|
+  end
+
+  def random_word
+    @fname = 'google-10000-english-no-swears.txt'
+    @randnum = rand(1..9893)
+
+    File.open(@fname, 'r') do |file|
       file.readlines.each_with_index do |line, idx|
-        word = line if idx == randnum
+        @word = line if idx == @randnum
       end
     end
 
-    puts word
-    word
+    puts @word
+    @word
   end
 end
 
 class Player < Game
-  attr_reader :player_guess, :guess
+  attr_reader :p_guess, :guess
 
   def initialize
     @guess = 12
@@ -50,7 +54,7 @@ game = Game.new
 game.random_word
 player = Player.new
 
-until player.player_guess == game.word || player.guess == 0 
+until player.p_guess == game.word || player.guess == 0 
   player.player_guess
 
 end
