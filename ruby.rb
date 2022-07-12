@@ -6,41 +6,33 @@ class Start
 
   def initialize
     @word = 'hey'
-    @game_running = true 
+    @game_running = true
   end
 
   def random_word
     @fname = 'google-10000-english-no-swears.txt'
-    
-    
-        @randnum = rand(1..9893)
 
-        File.open(@fname, 'r') do |file|
-        file.readlines.each_with_index do |line, idx|
-            if idx == @randnum
-                @word = line 
-            end 
-        end
-        end            
+    @randnum = rand(1..9893)
+
+    File.open(@fname, 'r') do |file|
+      file.readlines.each_with_index do |line, idx|
+        @word = line if idx == @randnum
+      end
+    end
     puts @word
     @word
   end
 
-  def check_word_length
-    until @word.length >=5 && @word.length <= 12 
-        random_word()
-    end 
-  end 
+  # def check_word_length
+  #   random_word until @word.length >= 5 && @word.length <= 12
+  # end
 
   def make_hint
-    if @word.length > 3 
-      @length = @word.length - 1 
-      @hint = Array.new(@length, "_")
-    end 
-  end 
-
-
-  
+    if @word.length > 3
+      @length = @word.length - 1
+      @hint = Array.new(@length, '_')
+    end
+  end
 end
 
 class Player
@@ -62,17 +54,16 @@ class Player
     if @p_guess.length > 1 || @p_guess.empty?
       puts 'INVALID'
       @p_guess = gets.chomp
-      guesses()
+      guesses
     elsif @p_guess.length == 1
       @guess -= 1
-      guesses()
+      guesses
     end
     @p_guess
   end
 end
 
 class Game
-
   attr_reader :game_running
 
   def initialize(p_guess, word, hint)
@@ -82,52 +73,45 @@ class Game
     @game_running = true
   end
 
-
-
   def add_to_hint
-
     if @word.include?(@p_guess)
-      @index =(0 ... @word.length).find_all {|i| @word[i] == "#{@p_guess}"}
-        p @index
-        @index.each do |index|
-          @hint[index] = @word[index]
-        end 
-        p @hint
-    end 
-  end 
+      @index = (0...@word.length).find_all { |i| @word[i] == @p_guess.to_s }
+      p @index
+      @index.each do |index|
+        @hint[index] = @word[index]
+      end
+      p @hint
+    end
+  end
 
   def check_win
-    joined_hint = @hint.join("")
-    p @hint 
+    joined_hint = @hint.join('')
+    p @hint
     p joined_hint
     joined_hint = joined_hint.to_s
     p joined_hint
-    p word = @word.strip()
+    p word = @word.strip
     word = word.to_s
     if joined_hint == word
-      puts "YOU WIN!"
-      @game_running = false 
-    end 
-
-  end 
-
-end 
+      puts 'YOU WIN!'
+      @game_running = false
+    end
+  end
+end
 
 player = Player.new
 start = Start.new
-start.random_word()
-start.check_word_length() #not working 
-start.make_hint()
+until start.word.length >= 5 && start.word.length <= 12
+  start.random_word
+  # start.check_word_length # not working
+  start.make_hint
+end 
 
-until player.p_guess == start.word || player.guess == 0
-  player.player_guess()
+until player.p_guess == start.word || player.guess.zero?
+  player.player_guess
   game = Game.new(player.p_guess, start.word, start.hint)
-    game.add_to_hint()
-    game.check_win() 
+  game.add_to_hint
+  game.check_win
 
-    if game.game_running == false 
-      player.guess = 0 
-    end 
+  player.guess = 0 if game.game_running == false
 end
-
-
