@@ -5,14 +5,12 @@ class Game
 
   def initialize
     @word = ''
-    @hint = []
 
   end
 
   def random_word
     @fname = 'google-10000-english-no-swears.txt'
     
-    until @word.length >= 5 && @word.length <= 12
     
         @randnum = rand(1..9893)
 
@@ -22,12 +20,22 @@ class Game
                 @word = line 
             end 
         end
-        end
-    end 
-
+        end            
     puts @word
     @word
   end
+
+  def check_word_length
+    until @word.length >=5 && @word.length <= 12 
+        random_word()
+    end 
+  end 
+
+  def show_hint
+    @length = @word.length
+    @hint = Array.new(@length, "_")
+    puts @hint
+  end 
 end
 
 class Player < Game
@@ -58,12 +66,13 @@ class Player < Game
 end
 
 game = Game.new
-game.random_word
+game.random_word()
+game.check_word_length()
 player = Player.new
 
 until player.p_guess == game.word || player.guess == 0 
   player.player_guess
-
+    game.show_hint()
 end
 
 
