@@ -20,13 +20,29 @@ end
 class Player < Game
 
     def initialize
-        @guesses = 0
+        @guesses = 12
+        @player_guess = "AB"
     end 
 
     def guesses
         puts "Guesses remaining: #{@guesses}"
     end 
+
+    def player_guess
+        puts "Guess a letter"
+        until @player_guess.length == 1 
+            @player_guess = gets.chomp
+            if @player_guess.length > 1 || @player_guess.length < 1 
+                puts "INVALID"
+            end 
+        end  
+        @guesses -= 1 
+    end 
+
 end
 
 game = Game.new
 game.random_word
+player = Player.new()
+player.player_guess
+player.guesses
