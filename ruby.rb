@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-class Game
+class Start
   attr_reader :word
 
   def initialize
-    @word = ''
-
+    @word = 'hey'
   end
 
   def random_word
@@ -31,14 +30,10 @@ class Game
     end 
   end 
 
-  def show_hint
-    @length = @word.length
-    @hint = Array.new(@length, "_")
-    puts @hint
-  end 
+  
 end
 
-class Player < Game
+class Player
   attr_reader :p_guess, :guess
 
   def initialize
@@ -65,14 +60,41 @@ class Player < Game
   end
 end
 
-game = Game.new
-game.random_word()
-game.check_word_length()
-player = Player.new
+class Game
 
-until player.p_guess == game.word || player.guess == 0 
-  player.player_guess
+  def initialize(p_guess, word)
+    @p_guess = p_guess
+    @word = word
+  end
+
+  def show_hint
+    if @word.length > 3 
+      @length = @word.length - 1 
+      @hint = Array.new(@length, "_")
+      p @hint
+    end 
+  end 
+
+  def add_to_hint
+    puts "add #{@word}"
+    puts "add  #{@p_guess}"
+    if @word.include?(@p_guess)
+        puts " add #{@word.index(@p_guess)}"
+    end 
+  end 
+
+end 
+
+player = Player.new
+start = Start.new
+start.random_word()
+start.check_word_length() #not working 
+
+until player.p_guess == start.word || player.guess == 0 
+  player.player_guess()
+  game = Game.new(player.p_guess, start.word)
     game.show_hint()
+    game.add_to_hint()
 end
 
 
