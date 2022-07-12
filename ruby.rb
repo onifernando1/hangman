@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Start
-  attr_reader :word
+  attr_reader :word, :hint
 
   def initialize
     @word = 'hey'
@@ -69,9 +69,10 @@ end
 
 class Game
 
-  def initialize(p_guess, word)
+  def initialize(p_guess, word, hint)
     @p_guess = p_guess
     @word = word
+    @hint = hint
   end
 
 
@@ -79,10 +80,15 @@ class Game
   def add_to_hint
 
     if @word.include?(@p_guess)
-        @index = @word.index(@p_guess)
-        @hint[@index] = @word[@index]
+      @index =(0 ... @word.length).find_all {|i| @word[i] == "#{@p_guess}"}
+        # @index = @word.index(@p_guess)
+        p @index
+        # @index = @index.split(",")
+        @index.each do |index|
+          @hint[index] = @word[index]
+        end 
         p @hint
-        @hint
+        # @hint
     end 
   end 
 
@@ -96,8 +102,7 @@ start.make_hint()
 
 until player.p_guess == start.word || player.guess == 0 
   player.player_guess()
-  game = Game.new(player.p_guess, start.word)
-    game.show_hint()
+  game = Game.new(player.p_guess, start.word, start.hint)
     game.add_to_hint()
 end
 
