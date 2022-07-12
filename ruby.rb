@@ -2,9 +2,11 @@
 
 class Start
   attr_reader :word, :hint
+  attr_accessor :game_running
 
   def initialize
     @word = 'hey'
+    @game_running = true 
   end
 
   def random_word
@@ -37,11 +39,13 @@ class Start
     end 
   end 
 
+
   
 end
 
 class Player
-  attr_reader :p_guess, :guess
+  attr_reader :p_guess
+  attr_accessor :guess
 
   def initialize
     @guess = 12
@@ -69,10 +73,13 @@ end
 
 class Game
 
+  attr_reader :game_running
+
   def initialize(p_guess, word, hint)
     @p_guess = p_guess
     @word = word
     @hint = hint
+    @game_running = true
   end
 
 
@@ -81,15 +88,27 @@ class Game
 
     if @word.include?(@p_guess)
       @index =(0 ... @word.length).find_all {|i| @word[i] == "#{@p_guess}"}
-        # @index = @word.index(@p_guess)
         p @index
-        # @index = @index.split(",")
         @index.each do |index|
           @hint[index] = @word[index]
         end 
         p @hint
-        # @hint
     end 
+  end 
+
+  def check_win
+    joined_hint = @hint.join("")
+    p @hint 
+    p joined_hint
+    joined_hint = joined_hint.to_s
+    p joined_hint
+    p word = @word.strip()
+    word = word.to_s
+    if joined_hint == word
+      puts "YOU WIN!"
+      @game_running = false 
+    end 
+
   end 
 
 end 
@@ -100,10 +119,15 @@ start.random_word()
 start.check_word_length() #not working 
 start.make_hint()
 
-until player.p_guess == start.word || player.guess == 0 
+until player.p_guess == start.word || player.guess == 0
   player.player_guess()
   game = Game.new(player.p_guess, start.word, start.hint)
     game.add_to_hint()
+    game.check_win() 
+
+    if game.game_running == false 
+      player.guess = 0 
+    end 
 end
 
 
