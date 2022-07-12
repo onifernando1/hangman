@@ -20,15 +20,15 @@ class Game
 end
 
 class Player < Game
-  attr_reader :player_guess, :guesses
+  attr_reader :player_guess, :guess
 
   def initialize
-    @guesses = 12
+    @guess = 12
     @player_guess = 'AB'
   end
 
   def guesses
-    puts "Guesses remaining: #{@guesses}"
+    puts "Guesses remaining: #{@guess}"
   end
 
   def player_guess
@@ -39,7 +39,7 @@ class Player < Game
       @player_guess = gets.chomp
       guesses()
     elsif @player_guess.length == 1
-      @guesses -= 1
+      @guess -= 1
       guesses()
     end
     @player_guess
@@ -49,6 +49,10 @@ end
 game = Game.new
 game.random_word
 player = Player.new
-until player.player_guess == game.word || player.guesses == 0
+
+until player.player_guess == game.word || player.guess == 0 
   player.player_guess
+
 end
+
+
