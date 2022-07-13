@@ -37,11 +37,12 @@ class Player
 
   def initialize
     @p_guess = 'AB'
+    @guess = 12
   end
 
-  # def guesses
-  #   puts "Guesses remaining: #{@guess}"
-  # end
+  def guesses
+    puts "Guesses remaining: #{@guess}"
+  end
 
   def player_guess
     puts 'Guess a letter'
@@ -49,54 +50,43 @@ class Player
     if @p_guess.length > 1 || @p_guess.empty?
       puts 'INVALID'
       @p_guess = gets.chomp
-      # guesses
-    # elsif @p_guess.length == 1 
-      # @guess -= 1
-      # guesses
     end
+    @guess -= 1
     @p_guess
+
   end
 end
 
 class Game
-  attr_reader :game_running
+  attr_reader :game_running, :correct
+  attr_accessor :guess
 
   def initialize(p_guess, word, hint)
     @p_guess = p_guess
     @word = word
     @hint = hint
     @game_running = true
-    @guess = 12
+    @correct = false 
   end
 
-  # def show_guess
-  #   puts "show #{@guess}" 
-  # end 
 
   def add_to_hint
     if @word.include?(@p_guess)
       @index = (0...@word.length).find_all { |i| @word[i] == @p_guess.to_s }
-      # p @index
       @index.each do |index|
         @hint[index] = @word[index]
       end
-      # puts "Guess = #{@guess} "
-    # elsif  @word.include?(@p_guess) == false 
-    #   @guess -= 1 
-    #   puts "Guess = #{@guess} "
-
+      puts "HINT ADDED CORRECT"
+      @correct = true 
+      puts"#{correct}"
     end
     p @hint
-    # show_guess()
 
   end
 
   def check_win
     joined_hint = @hint.join('')
-    # p @hint
-    # p joined_hint
     joined_hint = joined_hint.to_s
-    # p joined_hint
     word = @word.strip
     word = word.to_s
     if joined_hint == word
@@ -105,13 +95,11 @@ class Game
     end
   end
 
-  def guess_counter
+end
 
 
-  end 
 
-  def start_game()
-    player = Player.new
+player = Player.new
     start = Start.new
     until start.word.length >= 5 && start.word.length <= 12
       start.random_word
@@ -121,23 +109,21 @@ class Game
     until player.p_guess == start.word || player.guess.zero?
       player.player_guess
       game = Game.new(player.p_guess, start.word, start.hint)
+    
       game.add_to_hint
       game.check_win
-    
+
+      if game.correct == true 
+        player.guess += 1 
+        puts "#NEW #{player.guess}"
+      end 
+      player.guesses()
     
       player.guess = 0 if game.game_running == false
     end
     
     puts start.word
-  end 
 
-
-
-
-end
-
-game = Game.new("a", "b", "c")
-game.start_game()
 
 # player = Player.new
 # start = Start.new
