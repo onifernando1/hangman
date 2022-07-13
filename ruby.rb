@@ -36,13 +36,12 @@ class Player
   attr_accessor :guess
 
   def initialize
-    @guess = 12
     @p_guess = 'AB'
   end
 
-  def guesses
-    puts "Guesses remaining: #{@guess}"
-  end
+  # def guesses
+  #   puts "Guesses remaining: #{@guess}"
+  # end
 
   def player_guess
     puts 'Guess a letter'
@@ -50,10 +49,10 @@ class Player
     if @p_guess.length > 1 || @p_guess.empty?
       puts 'INVALID'
       @p_guess = gets.chomp
-      guesses
-    elsif @p_guess.length == 1
-      @guess -= 1
-      guesses
+      # guesses
+    # elsif @p_guess.length == 1 
+      # @guess -= 1
+      # guesses
     end
     @p_guess
   end
@@ -67,7 +66,12 @@ class Game
     @word = word
     @hint = hint
     @game_running = true
+    @guess = 12
   end
+
+  # def show_guess
+  #   puts "show #{@guess}" 
+  # end 
 
   def add_to_hint
     if @word.include?(@p_guess)
@@ -76,8 +80,14 @@ class Game
       @index.each do |index|
         @hint[index] = @word[index]
       end
+      # puts "Guess = #{@guess} "
+    # elsif  @word.include?(@p_guess) == false 
+    #   @guess -= 1 
+    #   puts "Guess = #{@guess} "
+
     end
     p @hint
+    # show_guess()
 
   end
 
@@ -94,25 +104,50 @@ class Game
       @game_running = false
     end
   end
+
+  def guess_counter
+
+
+  end 
+
+  def start_game()
+    player = Player.new
+    start = Start.new
+    until start.word.length >= 5 && start.word.length <= 12
+      start.random_word
+      start.make_hint
+    end 
+
+    until player.p_guess == start.word || player.guess.zero?
+      player.player_guess
+      game = Game.new(player.p_guess, start.word, start.hint)
+      game.add_to_hint
+      game.check_win
+    
+    
+      player.guess = 0 if game.game_running == false
+    end
+    
+    puts start.word
+  end 
+
+
+
+
 end
 
-player = Player.new
-start = Start.new
-until start.word.length >= 5 && start.word.length <= 12
-  start.random_word
-  start.make_hint
-end 
+game = Game.new("a", "b", "c")
+game.start_game()
 
-until player.p_guess == start.word || player.guess.zero?
-  player.player_guess
-  game = Game.new(player.p_guess, start.word, start.hint)
-  game.add_to_hint
-  game.check_win
+# player = Player.new
+# start = Start.new
+# until start.word.length >= 5 && start.word.length <= 12
+#   start.random_word
+#   start.make_hint
+# end 
 
 
-  player.guess = 0 if game.game_running == false
-end
-
-puts start.word
 
 # stop same letter being entered 
+# save game 
+# resume game 
